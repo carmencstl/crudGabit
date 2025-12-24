@@ -1,0 +1,669 @@
+/* ========================================
+   VARIABLES GLOBALES - PALETA GABIT
+   ======================================== */
+:root {
+    /* Colores principales */
+    --primary: #05576B;
+    --primary-dark: #0E3B47;
+    --primary-light: #3C9CB4;
+
+    /* Colores de acento */
+    --accent-green: #056B3B;
+    --accent-red: #9B1426;
+    --accent-orange: #FA914F;
+    --accent-yellow: #F2D639;
+
+    /* Neutros */
+    --neutral-bg: #E8EFEF;
+    --neutral-dark: #D4DEDE;
+    --white: #FFFFFF;
+    --text-muted: #6c757d;
+
+    /* Colores por CRUD */
+    --color-usuarios: #05576B;
+    --color-usuarios-light: #3C9CB4;
+    --color-usuarios-dark: #0E3B47;
+
+    --color-habitos: #056B3B;
+    --color-habitos-light: #0a9951;
+    --color-habitos-dark: #044d2f;
+
+    --color-logros: #FA914F;
+    --color-logros-light: #fbb07d;
+    --color-logros-dark: #e07a3a;
+}
+
+/* ========================================
+   TIPOGRAFÍA BASE
+   ======================================== */
+* {
+    font-family: "Epilogue", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Fraunces", serif;
+    font-weight: 700;
+}
+
+/* ========================================
+   LAYOUT GENERAL
+   ======================================== */
+body {
+    background: var(--neutral-bg);
+    min-height: 100vh;
+}
+
+.container-main {
+    padding: 2rem 0;
+}
+
+/* ========================================
+   NAVBAR
+   ======================================== */
+.navbar {
+    background: var(--primary);
+    box-shadow: 0 2px 10px rgba(5, 87, 107, 0.1);
+}
+
+.navbar .navbar-brand {
+    color: var(--white);
+    font-weight: 700;
+    font-family: "Fraunces", serif;
+}
+
+.navbar .navbar-text {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.navbar .btn-outline-light:hover {
+    background: var(--primary-light);
+    border-color: var(--primary-light);
+}
+
+/* ========================================
+   LOGIN / AUTH PAGES
+   ======================================== */
+body.auth-page {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-card {
+    background: var(--white);
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(5, 87, 107, 0.2);
+    padding: 2.5rem;
+    max-width: 450px;
+    width: 100%;
+}
+
+.login-card h1 {
+    color: var(--primary);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.subtitle {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.logo-icon {
+    width: 80px;
+    height: 80px;
+}
+
+/* Registro más compacto */
+.register-card {
+    max-width: 550px;
+    padding: 2rem;
+}
+
+.register-card .form-label {
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.register-card .form-control {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.95rem;
+}
+
+.register-card h1 {
+    font-size: 2rem;
+    margin-bottom: 0.25rem;
+}
+
+.register-card .subtitle {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+.register-card .btn {
+    padding: 0.65rem;
+}
+
+/* ========================================
+   FORMULARIOS
+   ======================================== */
+.form-label {
+    font-weight: 600;
+    color: var(--primary-dark);
+}
+
+.form-control {
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    transition: all 0.2s;
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 0.2rem rgba(5, 87, 107, 0.15);
+}
+
+/* ========================================
+   BOTONES BASE
+   ======================================== */
+.btn {
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background: var(--accent-green);
+    border: none;
+}
+
+.btn-primary:hover {
+    background: #044d2f;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(5, 107, 59, 0.3);
+}
+
+.btn-danger {
+    background: var(--accent-red);
+    border: none;
+}
+
+.btn-danger:hover {
+    background: #7a0f1d;
+}
+
+.btn-outline-secondary {
+    border: 2px solid var(--text-muted);
+    color: var(--text-muted);
+}
+
+.btn-outline-secondary:hover {
+    background: var(--text-muted);
+    color: var(--white);
+}
+
+/* ========================================
+   CARDS
+   ======================================== */
+.card {
+    background: var(--white);
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* ========================================
+   DASHBOARD - STAT CARDS
+   ======================================== */
+.stat-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    border-left: 4px solid transparent;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.stat-card h3 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.stat-card p {
+    color: var(--text-muted);
+    margin: 0.5rem 0 0 0;
+    font-weight: 500;
+}
+
+/* Colores por tipo */
+.stat-card.usuarios {
+    border-left-color: var(--color-usuarios);
+}
+
+.stat-card.usuarios h3 {
+    color: var(--color-usuarios);
+}
+
+.stat-card.usuarios:hover {
+    background: linear-gradient(135deg, var(--white) 0%, rgba(5, 87, 107, 0.05) 100%);
+}
+
+.stat-card.habitos {
+    border-left-color: var(--color-habitos);
+}
+
+.stat-card.habitos h3 {
+    color: var(--color-habitos);
+}
+
+.stat-card.habitos:hover {
+    background: linear-gradient(135deg, var(--white) 0%, rgba(5, 107, 59, 0.05) 100%);
+}
+
+.stat-card.logros {
+    border-left-color: var(--color-logros);
+}
+
+.stat-card.logros h3 {
+    color: var(--color-logros);
+}
+
+.stat-card.logros:hover {
+    background: linear-gradient(135deg, var(--white) 0%, rgba(250, 145, 79, 0.05) 100%);
+}
+
+/* ========================================
+   MENU CARDS (Dashboard)
+   ======================================== */
+.menu-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+}
+
+.menu-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary);
+    box-shadow: 0 4px 12px rgba(5, 87, 107, 0.15);
+}
+
+.menu-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.menu-card h4 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.menu-card p {
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* DASHBOARD - MENU CARDS CON COLORES */
+.menu-card.usuarios-menu {
+    border-left: 4px solid var(--color-usuarios);
+}
+
+.menu-card.usuarios-menu:hover {
+    background: linear-gradient(135deg, var(--white) 0%, rgba(5, 87, 107, 0.05) 100%);
+    border-color: var(--color-usuarios);
+}
+
+.menu-card.usuarios-menu h4 {
+    color: var(--color-usuarios);
+}
+
+.menu-card.habitos-menu {
+    border-left: 4px solid var(--color-habitos);
+}
+
+.menu-card.habitos-menu:hover {
+    background: linear-gradient(135deg, var(--white) 0%, rgba(5, 107, 59, 0.05) 100%);
+    border-color: var(--color-habitos);
+}
+
+.menu-card.habitos-menu h4 {
+    color: var(--color-habitos);
+}
+
+.menu-card.logros-menu {
+    border-left: 4px solid var(--color-logros);
+}
+
+.menu-card.logros-menu:hover {
+    background: linear-gradient(135deg, var(--white) 0%, rgba(250, 145, 79, 0.05) 100%);
+    border-color: var(--color-logros);
+}
+
+.menu-card.logros-menu h4 {
+    color: var(--color-logros);
+}
+
+/* ========================================
+   TABLAS
+   ======================================== */
+.table {
+    margin: 0;
+}
+
+.table thead {
+    background: var(--neutral-dark);
+}
+
+.table thead th {
+    font-weight: 600;
+    color: var(--primary-dark);
+    border-bottom: 2px solid var(--primary-light);
+}
+
+.table tbody tr:hover {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+/* ========================================
+   BADGES
+   ======================================== */
+.badge {
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    border-radius: 6px;
+}
+
+.badge.bg-danger {
+    background: var(--accent-red);
+}
+
+.badge.bg-secondary {
+    background: var(--text-muted);
+}
+
+/* Categorías de hábitos */
+.badge-salud {
+    background-color: var(--accent-green);
+}
+
+.badge-productividad {
+    background-color: var(--primary);
+}
+
+.badge-bienestar {
+    background-color: var(--primary-light);
+}
+
+.badge-aprendizaje {
+    background-color: var(--accent-red);
+}
+
+.badge-social {
+    background-color: var(--primary-dark);
+}
+
+/* Rareza de logros */
+.badge-comun {
+    background-color: var(--text-muted);
+}
+
+.badge-raro {
+    background-color: var(--primary-light);
+}
+
+.badge-epico {
+    background-color: var(--accent-red);
+}
+
+.badge-legendario {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: #000;
+    font-weight: 700;
+}
+
+/* Dificultad */
+.badge-facil {
+    background-color: var(--accent-green);
+}
+
+.badge-medio {
+    background-color: var(--accent-orange);
+}
+
+.badge-dificil {
+    background-color: var(--accent-red);
+}
+
+/* ========================================
+   ICONOS
+   ======================================== */
+.icono-habito,
+.icono-logro {
+    font-size: 1.5rem;
+    display: inline-block;
+}
+
+/* ========================================
+   ALERTAS
+   ======================================== */
+.alert {
+    border-radius: 8px;
+    border: none;
+}
+
+.demo-info {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1.5rem;
+    font-size: 0.875rem;
+}
+
+/* ========================================
+   PÁGINAS POR CRUD - USUARIOS (AZUL)
+   ======================================== */
+.page-usuarios {
+    background: linear-gradient(135deg, rgba(5, 87, 107, 0.08) 0%, var(--neutral-bg) 100%);
+}
+
+.page-usuarios .card {
+    border-top: 4px solid var(--color-usuarios);
+}
+
+.page-usuarios .card-header {
+    background: var(--color-usuarios);
+    color: var(--white);
+    border-radius: 12px 12px 0 0;
+}
+
+.page-usuarios .card-header h1,
+.page-usuarios .card-header h4 {
+    color: var(--white);
+    margin: 0;
+}
+
+.page-usuarios .btn-primary {
+    background: var(--color-usuarios);
+    border: none;
+}
+
+.page-usuarios .btn-primary:hover {
+    background: var(--color-usuarios-dark);
+    transform: translateY(-2px);
+}
+
+.page-usuarios .btn-outline-secondary {
+    border-color: var(--color-usuarios);
+    color: var(--color-usuarios);
+}
+
+.page-usuarios .btn-outline-secondary:hover {
+    background: var(--color-usuarios);
+    color: var(--white);
+}
+
+.page-usuarios .table thead {
+    background: var(--color-usuarios-light);
+}
+
+.page-usuarios .table thead th {
+    color: var(--white);
+    border-bottom: 2px solid var(--color-usuarios);
+}
+
+.page-usuarios .badge.bg-danger {
+    background: var(--color-usuarios-dark);
+}
+
+.page-usuarios .form-control:focus {
+    border-color: var(--color-usuarios);
+    box-shadow: 0 0 0 0.2rem rgba(5, 87, 107, 0.15);
+}
+
+/* ========================================
+   PÁGINAS POR CRUD - HÁBITOS (VERDE)
+   ======================================== */
+.page-habitos {
+    background: linear-gradient(135deg, rgba(5, 107, 59, 0.08) 0%, var(--neutral-bg) 100%);
+}
+
+.page-habitos .card {
+    border-top: 4px solid var(--color-habitos);
+}
+
+.page-habitos .card-header {
+    background: var(--color-habitos);
+    color: var(--white);
+    border-radius: 12px 12px 0 0;
+}
+
+.page-habitos .card-header h1,
+.page-habitos .card-header h4 {
+    color: var(--white);
+    margin: 0;
+}
+
+.page-habitos .btn-primary {
+    background: var(--color-habitos);
+    border: none;
+}
+
+.page-habitos .btn-primary:hover {
+    background: var(--color-habitos-dark);
+    transform: translateY(-2px);
+}
+
+.page-habitos .btn-outline-secondary {
+    border-color: var(--color-habitos);
+    color: var(--color-habitos);
+}
+
+.page-habitos .btn-outline-secondary:hover {
+    background: var(--color-habitos);
+    color: var(--white);
+}
+
+.page-habitos .table thead {
+    background: var(--color-habitos-light);
+}
+
+.page-habitos .table thead th {
+    color: var(--white);
+    border-bottom: 2px solid var(--color-habitos);
+}
+
+.page-habitos .form-control:focus {
+    border-color: var(--color-habitos);
+    box-shadow: 0 0 0 0.2rem rgba(5, 107, 59, 0.15);
+}
+
+/* ========================================
+   PÁGINAS POR CRUD - LOGROS (NARANJA)
+   ======================================== */
+.page-logros {
+    background: linear-gradient(135deg, rgba(250, 145, 79, 0.10) 0%, var(--neutral-bg) 100%);
+}
+
+.page-logros .card {
+    border-top: 4px solid var(--color-logros);
+}
+
+.page-logros .card-header {
+    background: var(--color-logros);
+    color: var(--white);
+    border-radius: 12px 12px 0 0;
+}
+
+.page-logros .card-header h1,
+.page-logros .card-header h4 {
+    color: var(--white);
+    margin: 0;
+}
+
+.page-logros .btn-primary {
+    background: var(--color-logros);
+    border: none;
+}
+
+.page-logros .btn-primary:hover {
+    background: var(--color-logros-dark);
+    transform: translateY(-2px);
+}
+
+.page-logros .btn-outline-secondary {
+    border-color: var(--color-logros);
+    color: var(--color-logros);
+}
+
+.page-logros .btn-outline-secondary:hover {
+    background: var(--color-logros);
+    color: var(--white);
+}
+
+.page-logros .table thead {
+    background: var(--color-logros-light);
+}
+
+.page-logros .table thead th {
+    color: var(--white);
+    border-bottom: 2px solid var(--color-logros);
+}
+
+.page-logros .form-control:focus {
+    border-color: var(--color-logros);
+    box-shadow: 0 0 0 0.2rem rgba(250, 145, 79, 0.15);
+}
+
+.page-logros .badge-legendario {
+    background: linear-gradient(135deg, #FFD700, var(--color-logros));
+    color: #000;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(250, 145, 79, 0.4);
+}

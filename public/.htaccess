@@ -1,0 +1,7 @@
+RewriteEngine On
+# IMPORTANTE: Indica que estamos en una subcarpeta
+RewriteBase /crudGabit/public/
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]

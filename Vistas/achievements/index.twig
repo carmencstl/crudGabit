@@ -1,0 +1,100 @@
+{% extends "layouts/base.twig" %}
+
+{% block title %}Gestión de Logros - Gabit{% endblock %}
+
+{% block body_class %}page-logros{% endblock %}
+
+{% block content %}
+    <div class="container my-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Mis Logros</h1>
+            <a href="/crudGabit/dashboard" class="btn btn-outline-secondary">← Volver al Dashboard</a>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <form method="GET" action="/crudGabit/achievements" class="d-flex">
+                    <input type="text"
+                           name="search"
+                           class="form-control me-2"
+                           placeholder="Buscar logros..."
+                           value="{{ search ?? '' }}">
+                    <button type="submit" class="btn btn-primary">
+                        🔍 Buscar
+                    </button>
+                    {% if search %}
+                        <a href="/crudGabit/achievements" class="btn btn-outline-secondary ms-2">
+                            ✖ Limpiar
+                        </a>
+                    {% endif %}
+                </form>
+            </div>
+            <div class="col-md-6 text-end">
+                <a href="/crudGabit/achievements/create" class="btn btn-success">+ Nuevo Logro</a>
+            </div>
+        </div>
+
+        <div class="card p-3 shadow-sm">
+            <h4 class="mb-3">
+                Logros Registrados
+                {% if search %}
+                    <small class="text-muted">({{ logros|length }} resultados para "{{ search }}")</small>
+                {% endif %}
+            </h4>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Hábito</th>
+                    <th>Fecha de Creación</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if logros is empty %}
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">
+                            {% if search %}
+                                No se encontraron logros que coincidan con "{{ search }}"
+                            {% else %}
+                                No tienes logros registrados
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    {% for logro in logros %}
+                        <tr>
+                            <td>{{ logro.nombre }}</td>
+                            <td>{{ logro.descripcion }}</td>
+                            <td>{{ logro.nombreHabito }}</td>
+                            <td>{{ logro.fechaCreacion }}</td>
+                            <td>
+                                <form method="POST" action="/crudGabit/achievements/edit" style="display:inline">
+                                    <input type="hidden" name="idLogro" value="{{ logro.idLogro }}">
+                                    <button type="submit" class="btn btn-sm btn-success">
+                                        Editar
+                                    </button>
+                                </form>
+                                <form method="POST" action="/crudGabit/achievements/delete" style="display:inline"
+                                      onsubmit="return confirm('¿Estás seguro de eliminar este logro?')">
+                                    <input type="hidden" name="idLogro" value="{{ logro.idLogro }}">
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        Eliminar
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if success %}
+            <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                <strong>¡Éxito!</strong> {{ success }}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

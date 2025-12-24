@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Gabit{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/crudGabit/public/css/styles.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;500;600;700&family=Fraunces:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body class="{% block body_class %}{% endblock %}">
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+            <span class="navbar-text me-3">
+                Hola, {{ usuarioActivo.nombre }}!
+            </span>
+            <a href="/crudGabit/logout" class="btn btn-outline-light btn-sm">Cerrar Sesión</a>
+        </div>
+</nav>
+<main class="container-main">
+    {% block content %}{% endblock %}
+</main>
+<footer class="footer mt-auto py-3 bg-light">
+    <div class="container">
+        <hr class="footer-divider">
+        <div class="text-center">
+            <p class="footer-copyright mb-0">
+                &copy; CRUD Gabit - Proyecto DWES | Desarrollado por Carmen Castillo Gaitán
+            </p>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

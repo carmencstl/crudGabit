@@ -1,0 +1,63 @@
+{% extends "layouts/base.twig" %}
+
+{% block title %}Crear Logro - Gabit{% endblock %}
+
+{% block body_class %}page-logros{% endblock %}
+
+{% block content %}
+    <div class="container my-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Crear Nuevo Logro</h1>
+            <a href="/crudGabit/achievements" class="btn btn-outline-secondary">← Volver a Logros</a>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card p-4 shadow-sm">
+                    <form method="POST" action="/crudGabit/achievements/create">
+
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre del Logro *</label>
+                            <input type="text" class="form-control" id="nombre" name="nombreLogro"
+                                   placeholder="Ej: Primera semana completada" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="descripcion" class="form-label">Descripción *</label>
+                            <textarea class="form-control" id="descripcion" name="descripcion"
+                                      rows="4" placeholder="Describe el logro..." required></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="idCamino" class="form-label">Hábito asociado *</label>
+                            <select class="form-select" id="idCamino" name="idCamino" required>
+                                <option value="" selected disabled>Selecciona un hábito</option>
+                                {% for habit in habitos %}
+                                    <option value="{{ habit.idCamino }}">{{ habit.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="form-text">
+                                El logro estará vinculado a este hábito
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary flex-fill">
+                                Crear Logro
+                            </button>
+                            <a href="/crudGabit/achievements" class="btn btn-outline-secondary">
+                                Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+                {% if success %}
+                    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                        <strong>¡Éxito!</strong> {{ success }}
+                    </div>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
