@@ -1,0 +1,9 @@
+.git
+.gitignore
+README.md
+.env
+.env.example
+vendor/
+composer.lock
+*.md
+.DS_Store
