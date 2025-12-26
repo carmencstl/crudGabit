@@ -4,56 +4,65 @@ namespace CrudGabit\Config;
 use PDO;
 use PDOException;
 
-    final class DataBase {
-        private const DBHOST = "dwes-db";
-        private const DBUSER = "root";
-        private const DBPASS = "root";
-        private const DBNAME = "crudGabit";
-        private static ?DataBase $instance = null;
-        private ?PDO $pdo = null;
+final class DataBase {
+    private static ?DataBase $instance = null;
+    private ?PDO $pdo = null;
 
-        /**
-         * Constructor privado para evitar instanciación externa
-         */
-        private function __construct()
-        {
-            try {
-                $dsn = "mysql:host=" . self::DBHOST . ";dbname=" . self::DBNAME . ";charset=utf8";
-                $this->pdo = PDO\Mysql::connect($dsn, self::DBUSER, self::DBPASS); #De clase PDO\MySQL
+    /**
+     * Constructor privado para evitar instanciación externa
+     */
+    private function __construct()
+    {
+        // Obtener variables de entorno con valores por defecto
+        $dbHost = getenv("DB_HOST") ?: "localhost";
+        $dbName = getenv("DB_NAME") ?: "crudGabit";
+        $dbUser = getenv("DB_USER") ?: "root";
+        $dbPass = getenv("DB_PASS") ?: "root";
 
-            } catch (PDOException $pdoe) {
-                die("ERROR {$pdoe->getMessage()}");
-            }
-            return $this->pdo;
-        }
+        try {
+            $dsn = "mysql:host=" . $dbHost . ";dbname=" . $dbName . ";charset=utf8";
 
-        /**
-         * Obtiene la instancia única de la clase DataBase
-         * @return DataBase
-         */
-        public static function getInstance(): DataBase
-        {
-            if (self::$instance === null) {
-                self::$instance = new self();
-            }
-            return self::$instance;
-        }
+            // Opciones de PDO
+            $options = [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES => false,
+            ];
 
-        /**
-         * Obtiene la conexión PDO
-         * @return PDO
-         */
-        public function getConnection(): PDO
-        {
-            return $this->pdo;
-        }
+            $this->pdo = new PDO($dsn, $dbUser, $dbPass, $options);
 
-        /**
-         * Método estático para obtener la conexión PDO directamente
-         * @return PDO
-         */
-        public static function connect(): PDO
-        {
-            return self::getInstance()->getConnection();
+        } catch (PDOException $pdoe) {
+            die("ERROR DE CONEXIÓN: {$pdoe->getMessage()}");
         }
     }
+
+    /**
+     * Obtiene la instancia única de la clase DataBase
+     * @return DataBase
+     */
+    public static function getInstance(): DataBase
+    {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
+    /**
+     * Obtiene la conexión PDO
+     * @return PDO
+     */
+    public function getConnection(): PDO
+    {
+        return $this->pdo;
+    }
+
+    /**
+     * Método estático para obtener la conexión PDO directamente
+     * @return PDO
+     */
+    public static function connect(): PDO
+    {
+        return self::getInstance()->getConnection();
+    }
+}

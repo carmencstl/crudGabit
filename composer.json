@@ -1,6 +1,9 @@
 {
   "require": {
-    "twig/twig": "^3.0"
+    "php": "^8.1",
+    "twig/twig": "^3.0",
+    "ext-pdo": "*",
+    "ext-pdo_mysql": "*"
   },
   "autoload": {
     "psr-4": {

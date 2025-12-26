@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . "/../vendor/autoload.php";
 
 use CrudGabit\Config\Router;
 use CrudGabit\Controladores\AuthController;
@@ -11,7 +11,10 @@ use CrudGabit\Controladores\UserController;
 use CrudGabit\Controladores\HabitController;
 use CrudGabit\Controladores\LogroController;
 
-$router = new Router("/crudGabit");
+// Obtener el basePath de las variables de entorno (en Railway será "")
+$basePath = getenv("BASE_PATH") ?: "/crudGabit";
+
+$router = new Router($basePath);
 
 //Rutas de autenticación
 $router->get("/", [AuthController::class, "showLogin"]);
