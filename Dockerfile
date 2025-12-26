@@ -65,3 +65,27 @@ RUN mkdir -p /etc/supervisor.d && \
 EXPOSE 80
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor.d/supervisord.ini"]
+FROM php:8.4-cli-alpine
+
+# Instalar extensiones de PHP
+RUN docker-php-ext-install pdo pdo_mysql
+
+# Instalar Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Directorio de trabajo
+WORKDIR /var/www/html
+
+# Copiar archivos
+COPY . /var/www/html/
+
+# Instalar dependencias
+RUN composer install --no-dev --optimize-autoloader
+
+# Permisos
+RUN chmod -R 755 /var/www/html
+
+EXPOSE 8080
+
+# Servidor PHP directo - simple y funciona
+CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]
