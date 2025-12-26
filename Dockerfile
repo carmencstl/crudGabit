@@ -4,6 +4,10 @@ FROM php:8.1-apache
 # Instalar extensiones de PHP necesarias
 RUN docker-php-ext-install pdo pdo_mysql
 
+# Deshabilitar módulos MPM conflictivos y habilitar solo prefork
+RUN a2dismod mpm_event mpm_worker || true
+RUN a2enmod mpm_prefork
+
 # Habilitar mod_rewrite de Apache
 RUN a2enmod rewrite
 
@@ -28,6 +32,7 @@ RUN sed -ri -e "s!/var/www/!\${APACHE_DOCUMENT_ROOT}!g" /etc/apache2/apache2.con
 # Configurar Apache para permitir .htaccess
 RUN echo "<Directory /var/www/html/public>" >> /etc/apache2/apache2.conf \
     && echo "    AllowOverride All" >> /etc/apache2/apache2.conf \
+    && echo "    Require all granted" >> /etc/apache2/apache2.conf \
     && echo "</Directory>" >> /etc/apache2/apache2.conf
 
 # Dar permisos correctos
