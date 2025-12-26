@@ -1,20 +1,10 @@
-# Usar imagen oficial de PHP con Apache
-FROM php:8.1-apache
+FROM php:8.1-fpm
 
-# Instalar extensiones de PHP necesarias
+# Instalar extensiones de PHP
 RUN docker-php-ext-install pdo pdo_mysql
 
-# FIX MPM: Eliminar completamente los módulos conflictivos
-RUN rm -f /etc/apache2/mods-enabled/mpm_event.load \
-    /etc/apache2/mods-enabled/mpm_event.conf \
-    /etc/apache2/mods-enabled/mpm_worker.load \
-    /etc/apache2/mods-enabled/mpm_worker.conf
-
-# Asegurar que solo mpm_prefork está habilitado
-RUN a2enmod mpm_prefork
-
-# Habilitar mod_rewrite
-RUN a2enmod rewrite
+# Instalar Nginx
+RUN apt-get update && apt-get install -y nginx && rm -rf /var/lib/apt/lists/*
 
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -25,28 +15,36 @@ WORKDIR /var/www/html
 # Copiar archivos del proyecto
 COPY . /var/www/html/
 
-# Instalar dependencias de Composer
+# Instalar dependencias
 RUN composer install --no-dev --optimize-autoloader
 
-# Cambiar el DocumentRoot de Apache para apuntar a public/
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+# Configuración de Nginx
+RUN echo 'server {\n\
+    listen 80;\n\
+    root /var/www/html/public;\n\
+    index index.php index.html;\n\
+\n\
+    location / {\n\
+        try_files $uri $uri/ /index.php?$query_string;\n\
+    }\n\
+\n\
+    location ~ \.php$ {\n\
+        fastcgi_pass 127.0.0.1:9000;\n\
+        fastcgi_index index.php;\n\
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;\n\
+        include fastcgi_params;\n\
+    }\n\
+}' > /etc/nginx/sites-available/default
 
-RUN sed -ri -e "s!/var/www/html!\${APACHE_DOCUMENT_ROOT}!g" /etc/apache2/sites-available/*.conf
-RUN sed -ri -e "s!/var/www/!\${APACHE_DOCUMENT_ROOT}!g" /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
-
-# Configurar permisos para public/
-RUN echo "<Directory /var/www/html/public>" >> /etc/apache2/apache2.conf \
-    && echo "    Options Indexes FollowSymLinks" >> /etc/apache2/apache2.conf \
-    && echo "    AllowOverride All" >> /etc/apache2/apache2.conf \
-    && echo "    Require all granted" >> /etc/apache2/apache2.conf \
-    && echo "</Directory>" >> /etc/apache2/apache2.conf
-
-# Dar permisos correctos
+# Permisos
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html
 
-# Exponer puerto
+# Script de inicio
+RUN echo '#!/bin/bash\n\
+php-fpm -D\n\
+nginx -g "daemon off;"' > /start.sh && chmod +x /start.sh
+
 EXPOSE 80
 
-# Iniciar Apache
-CMD ["apache2-foreground"]
+CMD ["/start.sh"]
