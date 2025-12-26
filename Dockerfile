@@ -4,11 +4,16 @@ FROM php:8.1-apache
 # Instalar extensiones de PHP necesarias
 RUN docker-php-ext-install pdo pdo_mysql
 
-# Deshabilitar módulos MPM conflictivos y habilitar solo prefork
-RUN a2dismod mpm_event mpm_worker || true
+# FIX MPM: Eliminar completamente los módulos conflictivos
+RUN rm -f /etc/apache2/mods-enabled/mpm_event.load \
+    /etc/apache2/mods-enabled/mpm_event.conf \
+    /etc/apache2/mods-enabled/mpm_worker.load \
+    /etc/apache2/mods-enabled/mpm_worker.conf
+
+# Asegurar que solo mpm_prefork está habilitado
 RUN a2enmod mpm_prefork
 
-# Habilitar mod_rewrite de Apache
+# Habilitar mod_rewrite
 RUN a2enmod rewrite
 
 # Instalar Composer
@@ -24,13 +29,14 @@ COPY . /var/www/html/
 RUN composer install --no-dev --optimize-autoloader
 
 # Cambiar el DocumentRoot de Apache para apuntar a public/
-ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 
 RUN sed -ri -e "s!/var/www/html!\${APACHE_DOCUMENT_ROOT}!g" /etc/apache2/sites-available/*.conf
 RUN sed -ri -e "s!/var/www/!\${APACHE_DOCUMENT_ROOT}!g" /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# Configurar Apache para permitir .htaccess
+# Configurar permisos para public/
 RUN echo "<Directory /var/www/html/public>" >> /etc/apache2/apache2.conf \
+    && echo "    Options Indexes FollowSymLinks" >> /etc/apache2/apache2.conf \
     && echo "    AllowOverride All" >> /etc/apache2/apache2.conf \
     && echo "    Require all granted" >> /etc/apache2/apache2.conf \
     && echo "</Directory>" >> /etc/apache2/apache2.conf
@@ -39,8 +45,8 @@ RUN echo "<Directory /var/www/html/public>" >> /etc/apache2/apache2.conf \
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html
 
-# Exponer el puerto
+# Exponer puerto
 EXPOSE 80
 
-# Comando para iniciar Apache
+# Iniciar Apache
 CMD ["apache2-foreground"]
