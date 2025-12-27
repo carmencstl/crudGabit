@@ -12,6 +12,10 @@ abstract class BaseController
     {
         $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . "/../Vistas");
         $this->twig = new \Twig\Environment($loader);
+        
+        // Añadir basePath como variable global
+        $basePath = getenv("BASE_PATH") ?: "/crudGabit";
+        $this->twig->addGlobal("basePath", $basePath);
     }
 
     /**
