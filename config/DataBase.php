@@ -8,21 +8,17 @@ final class DataBase {
     private static ?DataBase $instance = null;
     private ?PDO $pdo = null;
 
-    /**
-     * Constructor privado para evitar instanciación externa
-     */
     private function __construct()
     {
-        // Obtener variables de entorno con valores por defecto
-        $dbHost = getenv("DB_HOST") ?: "localhost";
-        $dbName = getenv("DB_NAME") ?: "crudGabit";
-        $dbUser = getenv("DB_USER") ?: "root";
-        $dbPass = getenv("DB_PASS") ?: "root";
+        // Railway pone las variables en $_ENV y $_SERVER
+        $dbHost = $_ENV["DB_HOST"] ?? $_SERVER["DB_HOST"] ?? "localhost";
+        $dbName = $_ENV["DB_NAME"] ?? $_SERVER["DB_NAME"] ?? "crudGabit";
+        $dbUser = $_ENV["DB_USER"] ?? $_SERVER["DB_USER"] ?? "root";
+        $dbPass = $_ENV["DB_PASS"] ?? $_SERVER["DB_PASS"] ?? "root";
 
         try {
             $dsn = "mysql:host=" . $dbHost . ";dbname=" . $dbName . ";charset=utf8";
 
-            // Opciones de PDO
             $options = [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -36,10 +32,6 @@ final class DataBase {
         }
     }
 
-    /**
-     * Obtiene la instancia única de la clase DataBase
-     * @return DataBase
-     */
     public static function getInstance(): DataBase
     {
         if (self::$instance === null) {
@@ -48,19 +40,11 @@ final class DataBase {
         return self::$instance;
     }
 
-    /**
-     * Obtiene la conexión PDO
-     * @return PDO
-     */
     public function getConnection(): PDO
     {
         return $this->pdo;
     }
 
-    /**
-     * Método estático para obtener la conexión PDO directamente
-     * @return PDO
-     */
     public static function connect(): PDO
     {
         return self::getInstance()->getConnection();
