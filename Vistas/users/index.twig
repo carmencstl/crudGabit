@@ -8,13 +8,13 @@
     <div class="container my-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1>Gestión de Usuarios</h1>
-            <a href="/crudGabit/dashboard" class="btn btn-outline-secondary">← Volver al Dashboard</a>
+            <a href="/dashboard" class="btn btn-outline-secondary">← Volver al Dashboard</a>
         </div>
 
         {# BUSCADOR #}
         <div class="row mb-4">
             <div class="col-md-6">
-                <form method="GET" action="/crudGabit/users" class="d-flex">
+                <form method="GET" action="/users" class="d-flex">
                     <input type="text"
                            name="search"
                            class="form-control me-2"
@@ -23,14 +23,14 @@
                     <button type="submit" class="btn btn-primary">Buscar
                     </button>
                     {% if search %}
-                        <a href="/crudGabit/users" class="btn btn-outline-secondary ms-2">
+                        <a href="/users" class="btn btn-outline-secondary ms-2">
                             ✖ Limpiar
                         </a>
                     {% endif %}
                 </form>
             </div>
             <div class="col-md-6 text-end">
-                <a href="/crudGabit/users/create" class="btn btn-success">+ Nuevo Usuario</a>
+                <a href="/users/create" class="btn btn-success">+ Nuevo Usuario</a>
             </div>
         </div>
 
@@ -80,13 +80,13 @@
                             </td>
                             <td>{{ usuario.fechaCreacion }}</td>
                             <td>
-                                <form method="POST" action="/crudGabit/users/edit" style="display:inline">
+                                <form method="POST" action="/users/edit" style="display:inline">
                                     <input type="hidden" name="idUsuario" value="{{ usuario.idUsuario }}">
                                     <button type="submit" class="btn btn-sm btn-success">
                                         Editar
                                     </button>
                                 </form>
-                                <form method="POST" action="/crudGabit/users/delete" style="display:inline"
+                                <form method="POST" action="/users/delete" style="display:inline"
                                       onsubmit="return confirm('¿Estás seguro de eliminar este usuario?')">
                                     <input type="hidden" name="idUsuario" value="{{ usuario.idUsuario }}">
                                     <button type="submit" class="btn btn-sm btn-danger">

@@ -8,13 +8,13 @@
     <div class="container my-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1>Mis Hábitos</h1>
-            <a href="/crudGabit/dashboard" class="btn btn-outline-secondary">← Volver al Dashboard</a>
+            <a href="/dashboard" class="btn btn-outline-secondary">← Volver al Dashboard</a>
         </div>
 
         {# BUSCADOR #}
         <div class="row mb-4">
             <div class="col-md-6">
-                <form method="GET" action="/crudGabit/habits" class="d-flex">
+                <form method="GET" action="/habits" class="d-flex">
                     <input type="text"
                            name="search"
                            class="form-control me-2"
@@ -23,14 +23,14 @@
                     <button type="submit" class="btn btn-primary">Buscar
                     </button>
                     {% if search %}
-                        <a href="/crudGabit/habits" class="btn btn-outline-secondary ms-2">
+                        <a href="/habits" class="btn btn-outline-secondary ms-2">
                             ✖ Limpiar
                         </a>
                     {% endif %}
                 </form>
             </div>
             <div class="col-md-6 text-end">
-                <a href="/crudGabit/habits/create" class="btn btn-success">+ Nuevo Hábito</a>
+                <a href="/habits/create" class="btn btn-success">+ Nuevo Hábito</a>
             </div>
         </div>
 
@@ -72,13 +72,13 @@
                             </td>
                             <td>{{ habit.fechaCreacion }}</td>
                             <td>
-                                <form method="POST" action="/crudGabit/habits/edit" style="display:inline">
+                                <form method="POST" action="/habits/edit" style="display:inline">
                                     <input type="hidden" name="idCamino" value="{{ habit.idCamino }}">
                                     <button type="submit" class="btn btn-sm btn-success">
                                         Editar
                                     </button>
                                 </form>
-                                <form method="POST" action="/crudGabit/habits/delete" style="display:inline"
+                                <form method="POST" action="/habits/delete" style="display:inline"
                                       onsubmit="return confirm('¿Estás seguro de eliminar este hábito?')">
                                     <input type="hidden" name="idCamino" value="{{ habit.idCamino }}">
                                     <button type="submit" class="btn btn-sm btn-danger">

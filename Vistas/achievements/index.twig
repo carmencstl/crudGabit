@@ -8,12 +8,12 @@
     <div class="container my-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1>Mis Logros</h1>
-            <a href="/crudGabit/dashboard" class="btn btn-outline-secondary">← Volver al Dashboard</a>
+            <a href="/dashboard" class="btn btn-outline-secondary">← Volver al Dashboard</a>
         </div>
 
         <div class="row mb-4">
             <div class="col-md-6">
-                <form method="GET" action="/crudGabit/achievements" class="d-flex">
+                <form method="GET" action="/achievements" class="d-flex">
                     <input type="text"
                            name="search"
                            class="form-control me-2"
@@ -22,14 +22,14 @@
                     <button type="submit" class="btn btn-primary">Buscar
                     </button>
                     {% if search %}
-                        <a href="/crudGabit/achievements" class="btn btn-outline-secondary ms-2">
+                        <a href="/achievements" class="btn btn-outline-secondary ms-2">
                             ✖ Limpiar
                         </a>
                     {% endif %}
                 </form>
             </div>
             <div class="col-md-6 text-end">
-                <a href="/crudGabit/achievements/create" class="btn btn-success">+ Nuevo Logro</a>
+                <a href="/achievements/create" class="btn btn-success">+ Nuevo Logro</a>
             </div>
         </div>
 
@@ -69,13 +69,13 @@
                             <td>{{ logro.nombreHabito }}</td>
                             <td>{{ logro.fechaCreacion }}</td>
                             <td>
-                                <form method="POST" action="/crudGabit/achievements/edit" style="display:inline">
+                                <form method="POST" action="/achievements/edit" style="display:inline">
                                     <input type="hidden" name="idLogro" value="{{ logro.idLogro }}">
                                     <button type="submit" class="btn btn-sm btn-success">
                                         Editar
                                     </button>
                                 </form>
-                                <form method="POST" action="/crudGabit/achievements/delete" style="display:inline"
+                                <form method="POST" action="/achievements/delete" style="display:inline"
                                       onsubmit="return confirm('¿Estás seguro de eliminar este logro?')">
                                     <input type="hidden" name="idLogro" value="{{ logro.idLogro }}">
                                     <button type="submit" class="btn btn-sm btn-danger">

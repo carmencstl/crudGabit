@@ -47,7 +47,14 @@ class Router
     public function run(): void
     {
         $metodo = $_SERVER["REQUEST_METHOD"];
-        $url = $this->prepararUrl($_SERVER["REQUEST_URI"]);
+        $urlOriginal = $_SERVER["REQUEST_URI"];
+        $url = $this->prepararUrl($urlOriginal);
+
+        // DEBUG
+        error_log("Router DEBUG - Método: $metodo");
+        error_log("Router DEBUG - URL original: $urlOriginal");
+        error_log("Router DEBUG - URL preparada: $url");
+        error_log("Router DEBUG - Rutas GET registradas: " . implode(", ", array_keys($this->rutasGET)));
 
         if ($metodo === "GET") {
             $this->ejecutarRuta($url, $this->rutasGET);
@@ -61,8 +68,10 @@ class Router
     private function ejecutarRuta(string $url, array $rutas): void
     {
         if (isset($rutas[$url])) {
+            error_log("Router DEBUG - Ruta encontrada: $url");
             $this->llamarControlador($rutas[$url]);
         } else {
+            error_log("Router DEBUG - Ruta NO encontrada: $url");
             $this->error404();
         }
     }
