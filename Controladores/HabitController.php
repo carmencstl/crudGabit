@@ -48,7 +48,7 @@ class HabitController extends BaseController
 
         Session::set("success", "Hábito eliminado correctamente.");
 
-        Request::redirect("/crudGabit/habits");
+        Request::redirect("/habits");
     }
 
     /**
@@ -67,7 +67,7 @@ class HabitController extends BaseController
         Session::set("success", "Hábito actualizado correctamente.");
         Session::set("habit_edit_id", $idHabito);
 
-        Request::redirect("/crudGabit/habits/edit");
+        Request::redirect("/habits/edit");
     }
 
 
@@ -86,7 +86,7 @@ class HabitController extends BaseController
             Session::set("habit_edit_id", $idHabito);
         }
         if (!$idHabito) {
-            Request::redirect("/crudGabit/habits");
+            Request::redirect("/habits");
         }
 
         $habit = Habito::getById((int)$idHabito);
@@ -135,7 +135,7 @@ class HabitController extends BaseController
         $habito = Habito::create($nombre, $descripcion, $autor, $categoria);  // ← CAMBIAR
         $habito->insertarHabitoEnBD();
         Session::set("success", "Hábito creado correctamente.");
-        Request::redirect("/crudGabit/habits/create");
+        Request::redirect("/habits/create");
     }
 
 }

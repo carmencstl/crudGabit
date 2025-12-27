@@ -51,7 +51,7 @@ class UserController extends BaseController
 
         Session::set("success", "Usuario borrado correctamente");
 
-        Request::redirect("/crudGabit/users");
+        Request::redirect("/users");
     }
 
 
@@ -70,7 +70,7 @@ class UserController extends BaseController
         }
 
         if (!$idUsuario) {
-            Request::redirect("/crudGabit/users");
+            Request::redirect("/users");
         }
 
         $usuario = Usuario::getById((int)$idUsuario);
@@ -115,7 +115,7 @@ class UserController extends BaseController
         }
 
         Session::set("idUsuarioEdit", $idUsuario);
-        Request::redirect("/crudGabit/users/edit");
+        Request::redirect("/users/edit");
     }
 
     /**
@@ -167,7 +167,7 @@ class UserController extends BaseController
                 Session::set("error", "Error al crear el usuario. Inténtalo de nuevo.");
             }
         }
-        Request::redirect("/crudGabit/users/create");
+        Request::redirect("/users/create");
     }
 
 

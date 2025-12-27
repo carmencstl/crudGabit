@@ -47,7 +47,7 @@ class LogroController extends BaseController
 
         Session::set("success", "Logro eliminado correctamente.");
 
-        Request::redirect("/crudGabit/achievements");
+        Request::redirect("/achievements");
     }
 
     /**
@@ -67,7 +67,7 @@ class LogroController extends BaseController
 
         // Si no hay ID válido, redirigimos al listado
         if (!$idLogro) {
-            Request::redirect("/crudGabit/achievements");
+            Request::redirect("/achievements");
         }
 
         // Obtenemos los datos del logro
@@ -103,7 +103,7 @@ class LogroController extends BaseController
         Session::set("logro_edit_id", $idLogro);
 
         // Redirijo a la misma página de edición
-        Request::redirect("/crudGabit/achievements/edit");
+        Request::redirect("/achievements/edit");
     }
 
 
@@ -144,7 +144,7 @@ class LogroController extends BaseController
         Session::set("success", "Logro creado correctamente.");
 
         // Redirigimos a la misma página de creación
-        Request::redirect("/crudGabit/achievements/create");
+        Request::redirect("/achievements/create");
     }
 
 

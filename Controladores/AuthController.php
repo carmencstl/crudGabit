@@ -38,11 +38,11 @@ use CrudGabit\Modelos\Usuario;
             $password = Request::get("password");
 
             if (Auth::login($email, $password)) {
-                Request::redirect("/crudGabit/dashboard");
+                Request::redirect("/dashboard");
             }
             else{
                 Session::set("error", "Credenciales inválidas. Inténtalo de nuevo.");
-                Request::redirect("/crudGabit/login");
+                Request::redirect("/login");
             }
         }
 
@@ -89,7 +89,7 @@ use CrudGabit\Modelos\Usuario;
                     Session::set("error", "Error al registrar el usuario. Inténtalo de nuevo.");
                 }
             }
-            Request::redirect("/crudGabit/register");
+            Request::redirect("/register");
         }
 
         /**
@@ -99,6 +99,6 @@ use CrudGabit\Modelos\Usuario;
         public function logout(): void
         {
             Auth::logout();
-            Request::redirect("/crudGabit/login");
+            Request::redirect("/login");
         }
     }
