@@ -1,11 +1,8 @@
-# Este archivo NO se usa en Railway (PHP built-in server)
-# Solo se usa en Apache local
-
 RewriteEngine On
 
-# Si el archivo o directorio existe físicamente, servirlo directamente
+# Si el archivo o directorio existe, servirlo directamente
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
-# Solo redirigir al index.php si NO es un archivo físico
+# Si no existe, redirigir a index.php
 RewriteRule ^(.*)$ index.php [QSA,L]

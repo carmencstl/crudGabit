@@ -11,22 +11,8 @@ use CrudGabit\Controladores\UserController;
 use CrudGabit\Controladores\HabitController;
 use CrudGabit\Controladores\LogroController;
 
-// Detectar automáticamente el basePath
-// Si estamos en Railway (producción), BASE_PATH debe estar vacío
-// Si estamos en local con XAMPP/WAMP, será /crudGabit
-$basePath = getenv("BASE_PATH");
-
-// Si no está definido, detectar automáticamente
-if ($basePath === false || $basePath === null) {
-    // En Railway, RAILWAY_ENVIRONMENT existe
-    if (getenv("RAILWAY_ENVIRONMENT") !== false) {
-        $basePath = "";  // Railway: sin subdirectorio
-    } else {
-        $basePath = "/crudGabit";  // Local: con subdirectorio
-    }
-}
-
-error_log("index.php: Usando basePath = '" . $basePath . "'");
+// basePath vacío porque Apache apunta directo a /public
+$basePath = "";
 
 $router = new Router($basePath);
 
@@ -50,7 +36,6 @@ $router->post("/users/update", [UserController::class, "editarUsuario"]);
 $router->get("/users/create", [UserController::class, "showCreate"]);
 $router->post("/users/create", [UserController::class, "createUser"]);
 
-
 //Rutas de gestión de hábitos
 $router->get("/habits", [HabitController::class, "index"] );
 $router->post("/habits/delete", [HabitController::class, "deleteHabit"]);
@@ -68,7 +53,6 @@ $router->post("/achievements/edit", [LogroController::class, "showEdit"]);
 $router->get("/achievements/edit", [LogroController::class, "showEdit"]);
 $router->get("/achievements/create", [LogroController::class, "showCreate"]);
 $router->post("/achievements/create", [LogroController::class, "createLogro"]);
-
 
 // Ejecutar el router
 $router->run();
