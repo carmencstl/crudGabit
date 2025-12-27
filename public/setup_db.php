@@ -21,14 +21,17 @@ try {
     echo "Creando tabla usuario...\n";
     $pdo->exec("
         CREATE TABLE IF NOT EXISTS usuario (
-            idUsuario INT AUTO_INCREMENT PRIMARY KEY,
-            nombreUsuario VARCHAR(100) UNIQUE NOT NULL,
+            idUsuario INT NOT NULL AUTO_INCREMENT,
+            nombreUsuario VARCHAR(50) NOT NULL,
             nombre VARCHAR(100) NOT NULL,
-            apellidos VARCHAR(100),
-            email VARCHAR(100) UNIQUE NOT NULL,
+            apellidos VARCHAR(100) NOT NULL,
+            email VARCHAR(100) NOT NULL,
             password VARCHAR(255) NOT NULL,
-            rol ENUM('admin', 'user') DEFAULT 'user',
-            fechaCreacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            rol ENUM('admin','usuario') DEFAULT 'usuario',
+            fechaCreacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (idUsuario),
+            UNIQUE KEY nombreUsuario (nombreUsuario),
+            UNIQUE KEY email (email)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
     ");
     echo "✅ Tabla usuario creada\n\n";
@@ -37,12 +40,15 @@ try {
     echo "Creando tabla camino...\n";
     $pdo->exec("
         CREATE TABLE IF NOT EXISTS camino (
-            idCamino INT AUTO_INCREMENT PRIMARY KEY,
+            idCamino INT NOT NULL AUTO_INCREMENT,
             nombre VARCHAR(100) NOT NULL,
-            descripcion TEXT,
-            auto INT,
-            categoria VARCHAR(50),
-            fechaCreacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            descripcion TEXT NOT NULL,
+            autor INT NOT NULL,
+            categoria VARCHAR(50) NOT NULL,
+            fechaCreacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (idCamino),
+            KEY fk_camino_usuario (autor),
+            CONSTRAINT fk_camino_usuario FOREIGN KEY (autor) REFERENCES usuario (idUsuario) ON DELETE CASCADE ON UPDATE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
     ");
     echo "✅ Tabla camino creada\n\n";
@@ -51,12 +57,14 @@ try {
     echo "Creando tabla logro...\n";
     $pdo->exec("
         CREATE TABLE IF NOT EXISTS logro (
-            idLogro INT AUTO_INCREMENT PRIMARY KEY,
+            idLogro INT NOT NULL AUTO_INCREMENT,
             nombre VARCHAR(100) NOT NULL,
-            descripcion TEXT,
-            idCamino INT,
-            fechaCreacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (idCamino) REFERENCES camino(idCamino) ON DELETE SET NULL
+            descripcion TEXT NOT NULL,
+            idCamino INT NOT NULL,
+            fechaCreacion TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (idLogro),
+            KEY fk_logro_camino (idCamino),
+            CONSTRAINT fk_logro_camino FOREIGN KEY (idCamino) REFERENCES camino (idCamino) ON DELETE CASCADE ON UPDATE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
     ");
     echo "✅ Tabla logro creada\n\n";
