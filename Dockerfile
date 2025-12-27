@@ -22,4 +22,4 @@ RUN chmod -R 755 /var/www/html
 EXPOSE 8080
 
 # Iniciar servidor PHP con el router que maneja archivos estáticos
-CMD ["php", "-S", "0.0.0.0:8080", "-t", "public", "router.php"]
+CMD ["php", "-S", "0.0.0.0:8080", "-t", "public", "public/router.php"]
