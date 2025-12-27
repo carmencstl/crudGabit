@@ -1,3 +1,6 @@
+# Este archivo NO se usa en Railway (PHP built-in server)
+# Solo se usa en Apache local
+
 RewriteEngine On
 
 # Si el archivo o directorio existe físicamente, servirlo directamente

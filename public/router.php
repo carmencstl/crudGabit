@@ -1,37 +1,19 @@
 <?php
-// Router simplificado para archivos estáticos
+/**
+ * Router para PHP built-in server (Railway)
+ * Equivalente al .htaccess pero para el servidor de desarrollo de PHP
+ * 
+ * Lógica: Si el archivo existe, déjalo pasar (return false)
+ *         Si no existe, carga index.php
+ */
 
-$requestUri = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+$uri = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+$filePath = __DIR__ . $uri;
 
-// NO quitar /crudGabit aquí - eso lo maneja el Router de la app
-// Este router solo debe servir archivos estáticos que existen
-
-// Buscar archivo en public/
-$filePath = __DIR__ . $requestUri;
-
-// Si es archivo y existe, servirlo INMEDIATAMENTE
-if (is_file($filePath)) {
-    $ext = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
-    
-    $mimeTypes = [
-        "css" => "text/css",
-        "js" => "application/javascript",
-        "png" => "image/png",
-        "jpg" => "image/jpeg",
-        "jpeg" => "image/jpeg",
-        "gif" => "image/gif",
-        "svg" => "image/svg+xml",
-        "woff" => "font/woff",
-        "woff2" => "font/woff2",
-        "ttf" => "font/ttf"
-    ];
-    
-    if (isset($mimeTypes[$ext])) {
-        header("Content-Type: " . $mimeTypes[$ext]);
-        readfile($filePath);
-        die();
-    }
+// Si el archivo existe (CSS, JS, imágenes, etc), servirlo directamente
+if (file_exists($filePath) && is_file($filePath)) {
+    return false; // El servidor PHP lo servirá automáticamente
 }
 
-// Si no es un archivo estático, pasar al index.php
-require __DIR__ . "/index.php";
+// Si no existe, pasar al index.php
+require_once __DIR__ . "/index.php";
