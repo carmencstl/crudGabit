@@ -11,8 +11,22 @@ use CrudGabit\Controladores\UserController;
 use CrudGabit\Controladores\HabitController;
 use CrudGabit\Controladores\LogroController;
 
-// Obtener el basePath de las variables de entorno (en Railway será "")
-$basePath = getenv("BASE_PATH") ?: "/crudGabit";
+// Detectar automáticamente el basePath
+// Si estamos en Railway (producción), BASE_PATH debe estar vacío
+// Si estamos en local con XAMPP/WAMP, será /crudGabit
+$basePath = getenv("BASE_PATH");
+
+// Si no está definido, detectar automáticamente
+if ($basePath === false || $basePath === null) {
+    // En Railway, RAILWAY_ENVIRONMENT existe
+    if (getenv("RAILWAY_ENVIRONMENT") !== false) {
+        $basePath = "";  // Railway: sin subdirectorio
+    } else {
+        $basePath = "/crudGabit";  // Local: con subdirectorio
+    }
+}
+
+error_log("index.php: Usando basePath = '" . $basePath . "'");
 
 $router = new Router($basePath);
 
