@@ -9,7 +9,6 @@
             {% if isAdmin %}
                 <div class="col-md-4">
                     <a href="users" class="stat-card usuarios">
-                        <div class="stat-icon">👥</div>
                         <h3>{{ stats.totalUsuarios }}</h3>
                         <p>Usuarios Registrados</p>
                     </a>
@@ -17,14 +16,12 @@
             {% endif %}
             <div class="col-md-4">
                 <a href="habits" class="stat-card habitos">
-                    <div class="stat-icon">✅</div>
                     <h3>{{ stats.totalHabitos }}</h3>
                     <p>Hábitos Creados</p>
                 </a>
             </div>
             <div class="col-md-4">
                 <a href="achievements" class="stat-card logros">
-                    <div class="stat-icon">🏆</div>
                     <h3>{{ stats.totalLogros }}</h3>
                     <p>Logros Creados</p>
                 </a>
@@ -41,7 +38,6 @@
                             {% if isAdmin %}
                                 <div class="col-md-4">
                                     <a href="users" class="menu-card usuarios-menu">
-                                        <div class="menu-icon">👥</div>
                                         <h4>Gestionar Usuarios</h4>
                                         <p>Ver, crear y editar usuarios</p>
                                     </a>
@@ -49,14 +45,12 @@
                             {% endif %}
                             <div class="col-md-{% if isAdmin %}4{% else %}6{% endif %}">
                                 <a href="habits" class="menu-card habitos-menu">
-                                    <div class="menu-icon">✅</div>
                                     <h4>Mis Hábitos</h4>
                                     <p>{% if isAdmin %}Administrar hábitos del sistema{% else %}Crea y sigue tus hábitos{% endif %}</p>
                                 </a>
                             </div>
                             <div class="col-md-{% if isAdmin %}4{% else %}6{% endif %}">
                                 <a href="achievements" class="menu-card logros-menu">
-                                    <div class="menu-icon">🏆</div>
                                     <h4>Mis Logros</h4>
                                     <p>{% if isAdmin %}Configurar logros y recompensas{% else %}Desbloquea nuevos logros{% endif %}</p>
                                 </a>

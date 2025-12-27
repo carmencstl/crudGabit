@@ -1,7 +1,8 @@
 RewriteEngine On
-# IMPORTANTE: Indica que estamos en una subcarpeta
-RewriteBase /crudGabit/public/
 
+# Si el archivo o directorio existe físicamente, servirlo directamente
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php [QSA,L]º
+
+# Solo redirigir al index.php si NO es un archivo físico
+RewriteRule ^(.*)$ index.php [QSA,L]
