@@ -19,7 +19,7 @@ RUN composer install --no-dev --optimize-autoloader
 # Crear directorios
 RUN mkdir -p /run/nginx
 
-# Configurar PHP-FPM CON USUARIO
+# Configurar PHP-FPM CON VARIABLES DE ENTORNO
 RUN echo '[global]' > /usr/local/etc/php-fpm.conf && \
     echo 'error_log = /proc/self/fd/2' >> /usr/local/etc/php-fpm.conf && \
     echo '' >> /usr/local/etc/php-fpm.conf && \
@@ -31,7 +31,9 @@ RUN echo '[global]' > /usr/local/etc/php-fpm.conf && \
     echo 'pm.max_children = 5' >> /usr/local/etc/php-fpm.conf && \
     echo 'pm.start_servers = 2' >> /usr/local/etc/php-fpm.conf && \
     echo 'pm.min_spare_servers = 1' >> /usr/local/etc/php-fpm.conf && \
-    echo 'pm.max_spare_servers = 3' >> /usr/local/etc/php-fpm.conf
+    echo 'pm.max_spare_servers = 3' >> /usr/local/etc/php-fpm.conf && \
+    echo '; Pasar variables de entorno a PHP' >> /usr/local/etc/php-fpm.conf && \
+    echo 'clear_env = no' >> /usr/local/etc/php-fpm.conf
 
 # Copiar script de inicio
 COPY start.sh /start.sh
