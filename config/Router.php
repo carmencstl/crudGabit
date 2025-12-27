@@ -118,13 +118,61 @@ class Router
     }
 
     /**
-     * Mostrar error 404
+     * Mostrar error 404 SIN REDIRECT (evita bucles infinitos)
      * @return void
      */
     private function error404(): void
     {
         http_response_code(404);
-        Request::redirect("/dashboard");
+        echo "<!DOCTYPE html>
+<html>
+<head>
+    <title>404 - Página no encontrada</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            text-align: center; 
+            padding: 50px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        h1 { 
+            color: #05576B;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        a {
+            background: #05576B;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        a:hover {
+            background: #0E3B47;
+        }
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <h1>404</h1>
+        <p>La página que buscas no existe.</p>
+        <a href='" . $this->basePath . "/dashboard'>Volver al Dashboard</a>
+    </div>
+</body>
+</html>";
+        exit();
     }
 
     /**

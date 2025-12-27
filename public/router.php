@@ -1,19 +1,26 @@
 <?php
 /**
- * Router para PHP built-in server (Railway)
- * Equivalente al .htaccess pero para el servidor de desarrollo de PHP
- * 
- * Lógica: Si el archivo existe, déjalo pasar (return false)
- *         Si no existe, carga index.php
+ * Router para PHP built-in server
+ * CRÍTICO: Evitar bucles de redirección
  */
 
-$uri = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
-$filePath = __DIR__ . $uri;
+// Obtener la URI sin query string
+$uri = urldecode(parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH));
 
-// Si el archivo existe (CSS, JS, imágenes, etc), servirlo directamente
-if (file_exists($filePath) && is_file($filePath)) {
-    return false; // El servidor PHP lo servirá automáticamente
+// IMPORTANTE: Si ya estamos procesando index.php, NO hacer nada más
+if (strpos($_SERVER["SCRIPT_NAME"], "index.php") !== false) {
+    return true;
 }
 
-// Si no existe, pasar al index.php
+// Construir path del archivo
+$filepath = __DIR__ . $uri;
+
+// Si es un archivo que existe (CSS, JS, imágenes), servirlo
+if (is_file($filepath)) {
+    return false; // PHP lo sirve automáticamente
+}
+
+// Si no es un archivo, cargar index.php UNA SOLA VEZ
+$_SERVER["SCRIPT_NAME"] = "/index.php";
 require_once __DIR__ . "/index.php";
+exit(); // IMPORTANTE: terminar ejecución aquí
