@@ -14,35 +14,52 @@ try {
 
     echo "✅ Conectado a la base de datos\n\n";
 
+    // Generar hash correcto para admin123
+    $passwordHash = password_hash("admin123", PASSWORD_DEFAULT);
+    echo "Hash generado para 'admin123'\n\n";
+
     // Insertar usuarios
     echo "Insertando usuarios...\n";
     
     // Administrador
-    $pdo->exec("
-        INSERT IGNORE INTO usuario (nombreUsuario, nombre, apellidos, email, password, rol) VALUES 
-        ('admin', 'Carmen', 'Castillo', 'admin@gabit.com', '\$2y\$10\$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin')
-    ");
+    $stmt = $pdo->prepare("INSERT IGNORE INTO usuario (nombreUsuario, nombre, apellidos, email, password, rol) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->execute(['admin', 'Carmen', 'Castillo', 'admin@gabit.com', $passwordHash, 'admin']);
     echo "  ✓ Usuario admin creado (email: admin@gabit.com, password: admin123)\n";
 
     // Usuarios normales
-    $pdo->exec("
-        INSERT IGNORE INTO usuario (nombreUsuario, nombre, apellidos, email, password, rol) VALUES 
-        ('juanperez', 'Juan', 'Pérez García', 'juan@ejemplo.com', '\$2y\$10\$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'usuario'),
-        ('mariagomez', 'María', 'Gómez López', 'maria@ejemplo.com', '\$2y\$10\$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'usuario'),
-        ('pedromart', 'Pedro', 'Martínez Ruiz', 'pedro@ejemplo.com', '\$2y\$10\$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'usuario'),
-        ('anafernandez', 'Ana', 'Fernández Sánchez', 'ana@ejemplo.com', '\$2y\$10\$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'usuario'),
-        ('carlosdiaz', 'Carlos', 'Díaz Moreno', 'carlos@ejemplo.com', '\$2y\$10\$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'usuario'),
-        ('lauralopez', 'Laura', 'López Jiménez', 'laura@ejemplo.com', '\$2y\$10\$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'usuario'),
-        ('davidgonzalez', 'David', 'González Muñoz', 'david@ejemplo.com', '\$2y\$10\$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'usuario'),
-        ('soniatorres', 'Sonia', 'Torres Romero', 'sonia@ejemplo.com', '\$2y\$10\$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'usuario')
-    ");
+    $usuarios = [
+        ['juanperez', 'Juan', 'Pérez García', 'juan@ejemplo.com'],
+        ['mariagomez', 'María', 'Gómez López', 'maria@ejemplo.com'],
+        ['pedromart', 'Pedro', 'Martínez Ruiz', 'pedro@ejemplo.com'],
+        ['anafernandez', 'Ana', 'Fernández Sánchez', 'ana@ejemplo.com'],
+        ['carlosdiaz', 'Carlos', 'Díaz Moreno', 'carlos@ejemplo.com'],
+        ['lauralopez', 'Laura', 'López Jiménez', 'laura@ejemplo.com'],
+        ['davidgonzalez', 'David', 'González Muñoz', 'david@ejemplo.com'],
+        ['soniatorres', 'Sonia', 'Torres Romero', 'sonia@ejemplo.com']
+    ];
+
+    $userIds = [];
+    foreach ($usuarios as $user) {
+        $stmt = $pdo->prepare("INSERT IGNORE INTO usuario (nombreUsuario, nombre, apellidos, email, password, rol) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->execute([
+            $user[0],
+            $user[1],
+            $user[2],
+            $user[3],
+            $passwordHash,
+            'usuario'
+        ]);
+        
+        // Obtener el ID insertado
+        $result = $pdo->query("SELECT idUsuario FROM usuario WHERE email = '{$user[3]}'")->fetch();
+        if ($result) {
+            $userIds[] = $result['idUsuario'];
+        }
+    }
     echo "  ✓ 8 usuarios normales creados\n\n";
 
-    // Obtener IDs de usuarios para los caminos
-    $usuarios = $pdo->query("SELECT idUsuario FROM usuario WHERE rol = 'usuario' ORDER BY idUsuario ASC LIMIT 8")->fetchAll(PDO::FETCH_COLUMN);
-    
-    if (count($usuarios) < 8) {
-        echo "⚠️  No hay suficientes usuarios. Ejecuta primero el script.\n";
+    if (count($userIds) < 8) {
+        echo "⚠️  No hay suficientes usuarios para crear caminos.\n";
         exit;
     }
 
@@ -50,28 +67,28 @@ try {
     
     // Caminos variados
     $caminos = [
-        ['Meditación Diaria', 'Practicar meditación mindfulness 10 minutos cada mañana', $usuarios[0], 'Salud Mental'],
-        ['Ejercicio Matutino', 'Hacer 30 minutos de ejercicio antes de desayunar', $usuarios[1], 'Salud Física'],
-        ['Lectura Nocturna', 'Leer al menos 20 páginas antes de dormir', $usuarios[2], 'Desarrollo Personal'],
-        ['Dieta Saludable', 'Consumir 5 porciones de frutas y verduras al día', $usuarios[3], 'Nutrición'],
-        ['Aprender Inglés', 'Estudiar inglés 30 minutos diarios con Duolingo', $usuarios[4], 'Educación'],
-        ['Yoga Semanal', 'Practicar yoga 3 veces por semana', $usuarios[0], 'Salud Física'],
-        ['Journaling', 'Escribir en mi diario personal cada noche', $usuarios[1], 'Desarrollo Personal'],
-        ['Hidratación', 'Beber 2 litros de agua al día', $usuarios[2], 'Salud Física'],
-        ['Cocinar en Casa', 'Preparar comidas caseras 5 días a la semana', $usuarios[3], 'Nutrición'],
-        ['Caminar', 'Caminar 10,000 pasos diarios', $usuarios[4], 'Salud Física'],
-        ['Programación', 'Practicar código 1 hora diaria', $usuarios[5], 'Desarrollo Profesional'],
-        ['Gratitud', 'Escribir 3 cosas por las que estoy agradecido cada día', $usuarios[6], 'Salud Mental'],
-        ['Desconexión Digital', 'No usar el móvil 1 hora antes de dormir', $usuarios[7], 'Salud Mental'],
-        ['Networking', 'Contactar con un profesional nuevo cada semana', $usuarios[5], 'Desarrollo Profesional'],
-        ['Ahorro', 'Ahorrar 10% del salario mensual', $usuarios[6], 'Finanzas']
+        ['Meditación Diaria', 'Practicar meditación mindfulness 10 minutos cada mañana', $userIds[0], 'Salud Mental'],
+        ['Ejercicio Matutino', 'Hacer 30 minutos de ejercicio antes de desayunar', $userIds[1], 'Salud Física'],
+        ['Lectura Nocturna', 'Leer al menos 20 páginas antes de dormir', $userIds[2], 'Desarrollo Personal'],
+        ['Dieta Saludable', 'Consumir 5 porciones de frutas y verduras al día', $userIds[3], 'Nutrición'],
+        ['Aprender Inglés', 'Estudiar inglés 30 minutos diarios con Duolingo', $userIds[4], 'Educación'],
+        ['Yoga Semanal', 'Practicar yoga 3 veces por semana', $userIds[0], 'Salud Física'],
+        ['Journaling', 'Escribir en mi diario personal cada noche', $userIds[1], 'Desarrollo Personal'],
+        ['Hidratación', 'Beber 2 litros de agua al día', $userIds[2], 'Salud Física'],
+        ['Cocinar en Casa', 'Preparar comidas caseras 5 días a la semana', $userIds[3], 'Nutrición'],
+        ['Caminar', 'Caminar 10,000 pasos diarios', $userIds[4], 'Salud Física'],
+        ['Programación', 'Practicar código 1 hora diaria', $userIds[5], 'Desarrollo Profesional'],
+        ['Gratitud', 'Escribir 3 cosas por las que estoy agradecido cada día', $userIds[6], 'Salud Mental'],
+        ['Desconexión Digital', 'No usar el móvil 1 hora antes de dormir', $userIds[7], 'Salud Mental'],
+        ['Networking', 'Contactar con un profesional nuevo cada semana', $userIds[5], 'Desarrollo Profesional'],
+        ['Ahorro', 'Ahorrar 10% del salario mensual', $userIds[6], 'Finanzas']
     ];
 
     $caminoIds = [];
-    foreach ($caminos as $index => $camino) {
+    foreach ($caminos as $camino) {
         $stmt = $pdo->prepare("INSERT INTO camino (nombre, descripcion, autor, categoria) VALUES (?, ?, ?, ?)");
         $stmt->execute($camino);
-        $caminoIds[$index] = $pdo->lastInsertId();
+        $caminoIds[] = $pdo->lastInsertId();
     }
     echo "  ✓ " . count($caminos) . " caminos creados\n\n";
 
@@ -138,7 +155,7 @@ try {
     echo "   • sonia@ejemplo.com (Sonia Torres)\n\n";
     
     echo "📊 ESTADÍSTICAS:\n";
-    echo "   • " . count($usuarios) . " usuarios\n";
+    echo "   • " . (count($userIds) + 1) . " usuarios\n";
     echo "   • " . count($caminos) . " caminos (hábitos)\n";
     echo "   • " . count($logros) . " logros\n\n";
     
@@ -146,6 +163,7 @@ try {
 
 } catch (PDOException $e) {
     echo "❌ ERROR: " . $e->getMessage() . "\n";
+    echo "Trace: " . $e->getTraceAsString() . "\n";
 }
 
 echo "</pre>";
