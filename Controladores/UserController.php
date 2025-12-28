@@ -47,9 +47,15 @@ class UserController extends BaseController
         Router::protectAdmin("/dashboard");
 
         $idUsuario = Request::post("idUsuario");
-        Usuario::deleteUserById((int)$idUsuario);
-
-        Session::set("success", "Usuario borrado correctamente");
+        error_log("DEBUG UserController - POST idUsuario recibido: " . ($idUsuario ?? "NULL"));
+        error_log("DEBUG UserController - POST completo: " . print_r($_POST, true));
+        
+        if ($idUsuario) {
+            Usuario::deleteUserById((int)$idUsuario);
+            Session::set("success", "Usuario borrado correctamente");
+        } else {
+            Session::set("error", "ID de usuario no recibido");
+        }
 
         Request::redirect("/users");
     }
