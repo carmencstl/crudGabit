@@ -42,18 +42,31 @@ class UserController extends BaseController
      * Borrar un usuario por su ID
      * @return void
      */
-    public function borrarUsuario(): void
+        public function borrarUsuario(): void
     {
         Router::protectAdmin("/dashboard");
 
+        echo "<h1>DEBUG - Método borrarUsuario ejecutado</h1>";
+        echo "<pre>";
+        echo "POST recibido:
+";
+        print_r($_POST);
+        echo "
+Request::post('idUsuario'): " . Request::post("idUsuario");
+        echo "</pre>";
+        die(); // Detener aquí para ver si llega
+        
         $idUsuario = Request::post("idUsuario");
-        error_log("DEBUG UserController - POST idUsuario recibido: " . ($idUsuario ?? "NULL"));
-        error_log("DEBUG UserController - POST completo: " . print_r($_POST, true));
         
         if ($idUsuario) {
             Usuario::deleteUserById((int)$idUsuario);
             Session::set("success", "Usuario borrado correctamente");
         } else {
+            Session::set("error", "ID de usuario no recibido");
+        }
+
+        Request::redirect("/users");
+    } else {
             Session::set("error", "ID de usuario no recibido");
         }
 
