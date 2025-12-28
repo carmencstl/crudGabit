@@ -5,6 +5,14 @@ PORT=${PORT:-8080}
 
 echo "=== Starting application on port $PORT ==="
 
+# Configurar PHP para que los logs vayan a stderr
+cat > /usr/local/etc/php/conf.d/logging.ini <<PHP_INI
+error_reporting = E_ALL
+display_errors = Off
+log_errors = On
+error_log = /dev/stderr
+PHP_INI
+
 # Configurar Nginx
 cat > /etc/nginx/http.d/default.conf <<NGINX
 server {
@@ -37,6 +45,9 @@ server {
         fastcgi_index index.php;
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         include fastcgi_params;
+        
+        # Pasar los logs de PHP a través de FastCGI
+        fastcgi_param PHP_VALUE "error_log=/dev/stderr";
     }
 }
 NGINX
