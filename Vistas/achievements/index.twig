@@ -75,8 +75,7 @@
                                         Editar
                                     </button>
                                 </form>
-                                <form method="POST" action="/achievements/delete" style="display:inline"
-                                      onsubmit="return confirm('¿Estás seguro de eliminar este logro?')">
+                                <form method="POST" action="/achievements/delete" style="display:inline">
                                     <input type="hidden" name="idLogro" value="{{ logro.idLogro }}">
                                     <button type="submit" class="btn btn-sm btn-danger">
                                         Eliminar

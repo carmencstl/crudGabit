@@ -81,14 +81,13 @@
                             <td>{{ usuario.fechaCreacion }}</td>
                             <td>
                                 <form method="POST" action="/users/edit" style="display:inline">
-                                    <input type="hidden" name="idUsuario" value="{{ usuario.idUsuario }}">
+                                    <input type="hidden" name="idUsuario" value="{{ usuario.id }}">
                                     <button type="submit" class="btn btn-sm btn-success">
                                         Editar
                                     </button>
                                 </form>
-                                <form method="POST" action="/users/delete" style="display:inline"
-                                      onsubmit="return confirm('¿Estás seguro de eliminar este usuario?')">
-                                    <input type="hidden" name="idUsuario" value="{{ usuario.idUsuario }}">
+                                <form method="POST" action="/users/delete" style="display:inline">
+                                    <input type="hidden" name="idUsuario" value="{{ usuario.id }}">
                                     <button type="submit" class="btn btn-sm btn-danger">
                                         Eliminar
                                     </button>
