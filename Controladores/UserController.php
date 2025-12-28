@@ -42,25 +42,16 @@ class UserController extends BaseController
      * Borrar un usuario por su ID
      * @return void
      */
-            public function borrarUsuario(): void
+    public function borrarUsuario(): void
     {
-        // Router::protectAdmin("/dashboard"); // COMENTADO TEMPORALMENTE
+        Router::protectAdmin("/dashboard");
 
-        echo "<h1>DEBUG - Método borrarUsuario ejecutado</h1>";
-        echo "<pre>";
-        echo "POST recibido:
-";
-        print_r($_POST);
-        echo "
-Request::post('idUsuario'): " . Request::post("idUsuario");
-        echo "</pre>";
-        die();
-    } else {
-            Session::set("error", "ID de usuario no recibido");
-        }
-
-        Request::redirect("/users");
-    } else {
+        $idUsuario = Request::post("idUsuario");
+        
+        if ($idUsuario) {
+            Usuario::deleteUserById((int)$idUsuario);
+            Session::set("success", "Usuario borrado correctamente");
+        } else {
             Session::set("error", "ID de usuario no recibido");
         }
 
@@ -100,7 +91,7 @@ Request::post('idUsuario'): " . Request::post("idUsuario");
     }
 
     /**
-     * Editar un usuario existente
+     * Actualizar un usuario existente
      * @return void
      */
     public function editarUsuario(): void
@@ -108,28 +99,24 @@ Request::post('idUsuario'): " . Request::post("idUsuario");
         Router::protectAdmin("/dashboard");
 
         $idUsuario = (int)Request::post("idUsuario");
-        $email = Request::post("email");
         $nombreUsuario = Request::post("nombreUsuario");
+        $nombre = Request::post("nombre");
+        $apellidos = Request::post("apellidos");
+        $email = Request::post("email");
+        $password = Request::post("password");
+        $rol = Request::post("rol");
 
-        $usuarioExistente = Usuario::getByEmail($email);
-        $nombreUsuarioExistente = Usuario::getByNombreUsuario($nombreUsuario);
-
-        if ($usuarioExistente && $usuarioExistente->getId() != $idUsuario) {
-            Session::set("error", "El email ya está registrado por otro usuario.");
-        } elseif ($nombreUsuarioExistente && $nombreUsuarioExistente->getId() != $idUsuario) {
-            Session::set("error", "El nombre de usuario ya está en uso por otro usuario.");
+        if ((Usuario::getByEmail($email) && Usuario::getByEmail($email)->getId() !== $idUsuario) ||
+            (Usuario::getByNombreUsuario($nombreUsuario) && Usuario::getByNombreUsuario($nombreUsuario)->getId() !== $idUsuario)) {
+            Session::set("error", "El email o nombre de usuario ya están en uso.");
         } else {
-            $nombre = Request::post("nombre");
-            $rol = Request::post("rol");
-            $apellidos = Request::post("apellidos");
-
-            Usuario::actualizarUsuario($idUsuario, $nombreUsuario, $nombre, $apellidos, $email, $rol);
+            Usuario::updateUsuario($idUsuario, $nombreUsuario, $nombre, $apellidos, $email, $password, $rol);
             Session::set("success", "Usuario actualizado correctamente.");
         }
 
-        Session::set("idUsuarioEdit", $idUsuario);
         Request::redirect("/users/edit");
     }
+
 
     /**
      * Mostrar el formulario de creación de usuario
@@ -139,14 +126,10 @@ Request::post('idUsuario'): " . Request::post("idUsuario");
     {
         Router::protectAdmin("/dashboard");
 
-        $success = Session::get("success");
         $error = Session::get("error");
-
-        Session::delete("success");
         Session::delete("error");
 
         echo $this->render("users/create.twig", [
-            "success" => $success,
             "error" => $error
         ]);
     }
@@ -155,33 +138,29 @@ Request::post('idUsuario'): " . Request::post("idUsuario");
      * Crear un nuevo usuario
      * @return void
      */
-    public static function createUser(): void
+    public function createUser(): void
     {
-        $email = Request::post("email");
+        Router::protectAdmin("/dashboard");
+
         $nombreUsuario = Request::post("nombreUsuario");
+        $nombre = Request::post("nombre");
+        $apellidos = Request::post("apellidos");
+        $email = Request::post("email");
+        $password = Request::post("password");
+        $rol = Request::post("rol");
 
-        if (is_object(Usuario::getByEmail($email))) {
-            Session::set("error", "El email ya está registrado. Por favor, usa otro email.");
-        } elseif (is_object(Usuario::getByNombreUsuario($nombreUsuario))) {
-            Session::set("error", "El nombre de usuario ya está en uso. Por favor, elige otro.");
+        if (Usuario::getByEmail($email) || Usuario::getByNombreUsuario($nombreUsuario)) {
+            Session::set("error", "El email o nombre de usuario ya están en uso.");
         } else {
-            $usuario = Usuario::create(
-                Request::post("nombreUsuario") ?? "",
-                Request::post("nombre") ?? "",
-                Request::post("apellidos") ?? "",
-                Request::post("email") ?? "",
-                Request::post("password") ?? "",
-                Request::post("rol") ?? "usuario"
-            );
-
+            $usuario = Usuario::create($nombreUsuario, $nombre, $apellidos, $email, $password, $rol);
             if ($usuario->insertarUsuario()) {
                 Session::set("success", "Usuario creado correctamente.");
+                Request::redirect("/users");
             } else {
-                Session::set("error", "Error al crear el usuario. Inténtalo de nuevo.");
+                Session::set("error", "Error al crear el usuario.");
             }
         }
+
         Request::redirect("/users/create");
     }
-
-
 }
