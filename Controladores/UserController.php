@@ -42,9 +42,9 @@ class UserController extends BaseController
      * Borrar un usuario por su ID
      * @return void
      */
-        public function borrarUsuario(): void
+            public function borrarUsuario(): void
     {
-        Router::protectAdmin("/dashboard");
+        // Router::protectAdmin("/dashboard"); // COMENTADO TEMPORALMENTE
 
         echo "<h1>DEBUG - Método borrarUsuario ejecutado</h1>";
         echo "<pre>";
@@ -54,14 +54,8 @@ class UserController extends BaseController
         echo "
 Request::post('idUsuario'): " . Request::post("idUsuario");
         echo "</pre>";
-        die(); // Detener aquí para ver si llega
-        
-        $idUsuario = Request::post("idUsuario");
-        
-        if ($idUsuario) {
-            Usuario::deleteUserById((int)$idUsuario);
-            Session::set("success", "Usuario borrado correctamente");
-        } else {
+        die();
+    } else {
             Session::set("error", "ID de usuario no recibido");
         }
 
