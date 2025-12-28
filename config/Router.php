@@ -3,6 +3,7 @@
 namespace CrudGabit\Config;
 
 use CrudGabit\Config\Request;
+use CrudGabit\Config\Auth;
 
 class Router
 {
