@@ -61,16 +61,16 @@ class LogroController extends BaseController
         if (!$idLogro) {
             $idLogro = Session::get("logro_edit_id");
         } else {
-            // Guardamos en sesión para futuras llamadas
+            // Guardo en sesión para futuras llamadas
             Session::set("logro_edit_id", $idLogro);
         }
 
-        // Si no hay ID válido, redirigimos al listado
+        // Si no hay ID válido, redirijo al listado
         if (!$idLogro) {
             Request::redirect("/achievements");
         }
 
-        // Obtenemos los datos del logro
+        //Obtengo los datos del logro
         $logro = Logro::getById($idLogro);
 
         // Mensaje de éxito si existe

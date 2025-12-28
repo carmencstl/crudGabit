@@ -16,21 +16,21 @@ class Request
 
     /**
      * Obtener todos los datos POST
-     * @return array
+     * @param string|null $key
+     * @return array|string|null
      */
     public static function post(?string $key = null) : array|string|null
     {
         if ($key) {
             return $_POST[$key] ?? null;
         }
-
         return $_POST;
     }
 
     /**
-     * Redirigir a URL (SIN añadir /crudGabit)
+     * Redirigir a URL
      * @param string $path
-     * @return never
+     * @return void
      */
     public static function redirect(string $path): void
     {

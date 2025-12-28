@@ -10,24 +10,16 @@ use CrudGabit\Config\Auth;
 
 class UserController extends BaseController
 {
-    private function log($message) {
-        file_put_contents('/tmp/user_controller.log', date('Y-m-d H:i:s') . " - " . $message . "\n", FILE_APPEND);
-    }
 
     public function index(): void
     {
-        $this->log("INDEX EJECUTADO");
         Router::protectAdmin("/dashboard");
-
         $search = Request::get("search");
-        $this->log("Search parameter: " . ($search ?? "NULL"));
 
         if ($search) {
             $usuarios = Usuario::search($search);
-            $this->log("Searching, found: " . count($usuarios));
         } else {
             $usuarios = Usuario::getAllUsers();
-            $this->log("Getting all users: " . count($usuarios));
         }
 
         $success = Session::get("success");
@@ -42,41 +34,32 @@ class UserController extends BaseController
 
     public function borrarUsuario(): void
     {
-        $this->log("BORRAR USUARIO EJECUTADO");
         Router::protectAdmin("/dashboard");
 
         $idUsuario = Request::post("idUsuario");
-        $this->log("ID recibido: " . ($idUsuario ?? "NULL"));
-        $this->log("POST data: " . print_r($_POST, true));
         
         if ($idUsuario) {
-            $this->log("Intentando borrar ID: " . $idUsuario);
             Usuario::deleteUserById((int)$idUsuario);
             Session::set("success", "Usuario borrado correctamente");
-            $this->log("Usuario borrado, success message set");
         } else {
             Session::set("error", "ID de usuario no recibido");
-            $this->log("ERROR: ID no recibido");
         }
-
-        $this->log("Redirigiendo a /users");
         Request::redirect("/users");
     }
 
     public function showEdit(): void
     {
-        $this->log("SHOW EDIT EJECUTADO");
         Router::protectAdmin("/dashboard");
 
         $idUsuario = Request::post("idUsuario") ?? Request::get("idUsuario") ?? Session::get("idUsuarioEdit");
-        $this->log("ID para editar: " . ($idUsuario ?? "NULL"));
+
 
         if (Request::post("idUsuario") || Request::get("idUsuario")) {
             Session::set("idUsuarioEdit", $idUsuario);
         }
 
         if (!$idUsuario) {
-            $this->log("No ID, redirigiendo a /users");
+
             Request::redirect("/users");
         }
 
@@ -95,7 +78,6 @@ class UserController extends BaseController
 
     public function editarUsuario(): void
     {
-        $this->log("EDITAR USUARIO EJECUTADO");
         Router::protectAdmin("/dashboard");
 
         $idUsuario = (int)Request::post("idUsuario");
@@ -110,7 +92,7 @@ class UserController extends BaseController
             (Usuario::getByNombreUsuario($nombreUsuario) && Usuario::getByNombreUsuario($nombreUsuario)->getId() !== $idUsuario)) {
             Session::set("error", "El email o nombre de usuario ya están en uso.");
         } else {
-            Usuario::updateUsuario($idUsuario, $nombreUsuario, $nombre, $apellidos, $email, $password, $rol);
+            Usuario::actualizarUsuario($idUsuario, $nombreUsuario, $nombre, $apellidos, $email, $password, $rol);
             Session::set("success", "Usuario actualizado correctamente.");
         }
 

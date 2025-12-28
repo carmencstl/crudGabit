@@ -27,7 +27,6 @@ use CrudGabit\Modelos\Usuario;
                 ]);
         }
 
-
         /**
          * Procesar login
          * @return void

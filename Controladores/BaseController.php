@@ -10,15 +10,20 @@ abstract class BaseController
 
     public function __construct()
     {
-        $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . "/../Vistas");
+        $loader = new \Twig\Loader\FilesystemLoader( "/../Vistas");
         $this->twig = new \Twig\Environment($loader);
-        
-        // basePath vacío porque Apache apunta directo a /public
+
         $basePath = "";
         
         $this->twig->addGlobal("basePath", $basePath);
     }
 
+    /**
+     * Renderiza una plantilla Twig.
+     * @param string $template
+     * @param array $info
+     * @return string
+     */
     protected function render(string $template, array $info = []): string
     {
         $info["usuarioActivo"] = Auth::user();
