@@ -22,7 +22,7 @@ final class DataBase {
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                 PDO::ATTR_EMULATE_PREPARES => false,
-                PDO::ATTR_TIMEOUT => 30,
+                PDO::ATTR_TIMEOUT => 30, // Timeout de 30 segundos
                 PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"
             ];
 
@@ -35,11 +35,6 @@ final class DataBase {
         }
     }
 
-
-    /**
-     * Obtener la instancia única de la clase DataBase
-     * @return DataBase
-     */
     public static function getInstance(): DataBase
     {
         if (self::$instance === null) {
@@ -48,20 +43,11 @@ final class DataBase {
         return self::$instance;
     }
 
-
-    /**
-     * Obtener la conexión PDO
-     * @return PDO
-     */
     public function getConnection(): PDO
     {
         return $this->pdo;
     }
 
-    /**
-     * Conectar a la base de datos y obtener la instancia PDO
-     * @return PDO
-     */
     public static function connect(): PDO
     {
         return self::getInstance()->getConnection();

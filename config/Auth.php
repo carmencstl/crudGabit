@@ -52,6 +52,7 @@
             return $resultado === "admin";
         }
 
+
         /**
          * Cerrar sesión
          * @return void

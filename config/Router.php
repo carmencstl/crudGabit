@@ -3,7 +3,6 @@
 namespace CrudGabit\Config;
 
 use CrudGabit\Config\Request;
-use CrudGabit\Config\Auth;
 
 class Router
 {
@@ -90,17 +89,14 @@ class Router
     private function ejecutarRuta(string $url, array $rutas): void
     {
         if (isset($rutas[$url])) {
+            error_log("Router DEBUG - Ruta encontrada: $url");
             $this->llamarControlador($rutas[$url]);
         } else {
+            error_log("Router DEBUG - Ruta NO encontrada: $url");
             $this->error404();
         }
     }
 
-    /**
-     * Llamar al controlador correspondiente
-     * @param array $controlador
-     * @return void
-     */
     private function llamarControlador(array $controlador): void
     {
         [$clase, $metodo] = $controlador;
@@ -112,23 +108,23 @@ class Router
         $clase->$metodo();
     }
 
-    /**
-     * Mostrar página de error 404
-     * @return void
-     */
     private function error404(): void
     {
         http_response_code(404);
         echo "<!DOCTYPE html>
-        <html>
-        <head>
-            <title>404</title>
-        </head>
-        <body>
-            <h1>404 - Página no encontrada</h1>
-            <a href=\"/dashboard\">Volver al Dashboard</a>
-        </body>
-        </html>";
+<html>
+<head>
+    <title>404</title>
+    <style>
+        body { font-family: Arial; text-align: center; padding: 50px; }
+        h1 { color: #05576B; }
+    </style>
+</head>
+<body>
+    <h1>404 - Página no encontrada</h1>
+    <a href='/dashboard'>Volver al Dashboard</a>
+</body>
+</html>";
         exit();
     }
 
